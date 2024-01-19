@@ -8,7 +8,7 @@ import contextlib
 from .funcs import fetch_reporter
 
 ##__________________________________________________________________||
-def atpbar(iterable, name=None, time_track=False):
+def atpbar(iterable, name=None, time_track=False, length=None):
     """returns an instance of `Atpbar`
 
     Parameters
@@ -25,13 +25,16 @@ def atpbar(iterable, name=None, time_track=False):
         Otherwise, the object received as the parameter `iterable`.
 
     """
-    try:
-        len_ = len(iterable)
-    except TypeError:
-        logger = logging.getLogger(__name__)
-        logging.warning('length is unknown: {!r}'.format(iterable))
-        logging.warning('atpbar is turned off')
-        return iterable
+    if length != None and isinstance(length, int):
+        len_ = length
+    else:
+        try:
+            len_ = len(iterable)
+        except TypeError:
+            logger = logging.getLogger(__name__)
+            logging.warning('length is unknown: {!r}'.format(iterable))
+            logging.warning('atpbar is turned off')
+            return iterable
 
     if name is None:
         name = repr(iterable)
